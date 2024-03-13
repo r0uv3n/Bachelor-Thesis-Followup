@@ -1,0 +1,331 @@
+% %&Harmonic_Functions_and_the_Mass_of_Asymptotically_Flat_Half_Spaces.fmt
+\PassOptionsToPackage{style=alphabetic,backend=biber,maxnames=4}{biblatex}
+\PassOptionsToPackage{hypertexnames=false}{hyperref}
+\PassOptionsToPackage{capitalise}{cleveref}
+\documentclass[titlepage,numbers=noenddot,oneside,%
+cleardoublepage=empty,paper=a4,fontsize=11pt,%
+english,%lockflag%
+]{scrartcl}
+
+\usepackage[definetheorems]{hrftex}
+\usepackage[nodayofweek]{datetime}
+\endofdump
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\addbibresource{ZoteroBibliographyPositiveMassTheoremBachelorThesis.bib}
+% \usepackage[toc]{appendix}
+
+% \usepackage[euler-digits,euler-hat-accent]{eulervm}
+% \usepackage{newpxtext}.
+\ExecuteBibliographyOptions{maxnames=4}
+
+% % upright differential
+% \derivset{\odif}{upright=true}
+
+% math punctuation
+\newcommand*{\mathcomma}{\,,}
+\newcommand*{\mathfullstop}{\,.}
+
+\let\sphere\relax
+\newcommand{\sphere}{\mathbb{S}}
+
+
+% attempt to fix \cref{fact:...}
+\crefname{fact}{fact}{facts}
+\crefname{fact}{Fact}{Facts}
+
+\newcommand{\ext}{\mathrm{ext}} % for the exterior region
+\newcommand{\Mend}{M_{\mathrm{end}}} % for an end of M region
+\newcommand{\mass}[2]{\mathfrak{m}_{(#1,#2)}} % for the ADM mass
+
+\newcommand{\Ricci}{\mathrm{Ric}} % Ricci curvature tensor
+\newcommand{\riemanncurvature}{\mathrm{Rm}} % Riemann curvature tensor
+
+\DeclareFunction+{\sheafsections}[1,]{\Gamma}{#1}
+\DeclareFunction+{\smallo}[1,]{o}{#1}
+\DeclareFunction+{\bigo}[1,]{O}{#1}
+\DeclareFunction-{\gtrace}[2,1]{\operatorname{tr}_{#1}}{#2}
+
+\newcommand{\todomark}{%
+    \colorbox{purple}{%
+        \textnormal\ttfamily\bfseries\color{white}%
+        TODO%
+    }%
+}
+\newcommand{\todo}[1][]{%
+    \ifstrempty{#1}{%
+        \def\todotext{Todo}%
+    }{%
+        \def\todotext{Todo: #1}%
+    }%
+    \todomark%
+    {%
+        \marginpar{%
+            \raggedright\normalfont\sffamily\scriptsize\todotext%
+        }%
+    }%
+}
+
+\title{A confusion about the Stern integral inequality}
+\vspace{1em}
+\author{Henry Ruben Fischer}
+\begin{document}
+
+\selectlanguage{english}
+\setquotestyle{english}
+\pagenumbering{roman}
+\theoremstyle{plain}
+\makeatletter
+\begin{center}
+
+    \textsc{\LARGE \@title}
+    
+    
+    \large{\@author}
+\end{center}
+\makeatother
+\newcommand{\nonHarmonic}[1]{\textcolor{blue}{#1}}
+\newcommand{\additionalTerms}[1]{\textcolor{red}{#1}}
+\pagenumbering{arabic}
+Everything below is pretty much directly adopted from my Bachelor's Thesis (which more or less just followed \cite{brayHarmonicFunctionsMass2019}), though I have tried to keep track of \additionalTerms{additional terms} (marked in \additionalTerms{red}) to strengthen the encountered inequalities into equalities.
+
+
+
+
+% Our main tool motivating our use of harmonic functions is the following integral inequality relating scalar curvature to derivatives of harmonic functions.
+The following is adopted from \cite[Proposition 4.2]{brayHarmonicFunctionsMass2019} but (surely due to some mistake I made somewhere) I have seemingly proven an equality without even requiring any additional terms.
+    % (but we skip the application of the Gauss Lemma since that part is not really relevant). % or as late as possible?
+    {\newcommand{\maxu}{\overline{u}}
+        \newcommand{\minu}{\underline{u}}
+        \newcommand{\nonzeroboundary}{\partial_{\neq 0}\Omega}
+        \begin{proposition}\label{prop:main_inequality}
+            Let \( (\Omega,g) \) be a compact 3-dimensional oriented Riemannian manifold with piecewise smooth boundary \( \boundary{\Omega}=P_1\disjointunion P_2 \), having outward unit normal \( \nu \). Let \( u\maps \Omega\to \reals \) be a harmonic function (\ie \( \laplacian u=0 \)) such that \( \partial_{\nu}u=0 \) on \( P_1 \) and \( \abs{\nabla u}> 0 \) on \( P_2 \). If \( \maxu \) and \( \minu \) denote the maximum and minimum of \( u \) and \( S_t \) are \( t \)-level sets of \( u \), then
+            \begin{multline*}
+                \int_{\minu}^{\maxu} \int_{S_t} \frac{1}{2}\p[\Bigg]{\frac{\abs{\nabla^2 u}}{\abs{\nabla u}^2}+R }\odif{A}+\int_{\boundary{S_t}\cap P_1}H_{P_1}\odif{l}\odif{t}\\
+                =\int_{\minu}^{\maxu}\p[\Big]{2\pi \chi(S_t)-\int _{\boundary{S_t} \cap P_2}\kappa_{\boundary{S_t}}\odif{l}}\odif{t}+ \int_{\tilde{P}_2}\partial_{\nu} \abs{\nabla u}\odif{A}\mathcomma
+            \end{multline*}
+            where \( \chi(S_t) \) denotes the Euler characteristic of the level sets, \( \kappa_{\boundary{S_t}} \) denotes the geodesic curvature of \( \boundary{S_t} \) in \( S_t \) and \( H_{P_1} \) denotes the mean curvature of \( P_1 \).
+        \end{proposition}
+        \newcommand{\secondfundamentalform}{\Romannum{2}}
+        % For the proof we follow the \cite[Proof of Proposition 4.2 in][]{brayHarmonicFunctionsMass2019} and use two Lemmata:
+        % \begin{lemma}\label{lem:main_identity}
+        %     For \( u\maps \Omega\to \reals \) as above with level set \( S \) we have
+        %     \begin{equation*}
+        %         2\Ricci(\nabla u, \nabla u)=\abs{\nabla u}^2(R_\Omega-R_S)+2\abs{\nabla\abs{\nabla u}}^2-\abs{\nabla^2 u}^2\nonHarmonic{-2\laplacian u \nabla^2_{\nu\nu}u+(\laplacian u)^2}\mathfullstop
+        %     \end{equation*}
+        % \end{lemma}
+        % \begin{proof}  
+        %     Let \( S \) be a level set of \( u \) with induced metric \( \gamma \), second fundamental form \( A_{ij} \) and mean curvature \( H \). The normal to \( S \) is then \( \nu^i=\nabla^i u/\abs{\nabla u} \) and we have
+        %     \begin{equation*}
+        %         \begin{aligned}[t]
+        %             A_{ij}&=\gamma^{k}_i\gamma^l_j \nabla_k (\nabla_l u/\abs{\nabla u})\\
+        %             &=\gamma^{k}_i \gamma^{l}_j\frac{\nabla^2_{kl}u}{\abs{\nabla u}}+(\dotsc)\gamma^l_j\nabla_l u \\
+        %             &=\gamma^{k}_i \gamma^l_j \frac{\nabla^2_{kl}u}{\abs{\nabla u}}\\
+        %             &=(g^k_i-\nu_i \nu^k)(g^l_j - \nu^l \nu_j)\frac{\nabla^2_{kl}u}{\abs{\nabla u}}\\
+        %             &=\frac{\overbrace{\nabla^2_{ij}u}^{    \text{Term \( T^1 \)}}-\overbrace{\nu_i \nu^k\nabla^2_{kj}u}^{T^2}-\overbrace{\nu_j \nu^l\nabla^2_{il}u}^{T^3}+\overbrace{\nu_i \nu_j \nu^k \nu^l\nabla_{kl}u}^{T^4}}{\abs{\nabla u}}
+        %         \end{aligned}
+        %     \end{equation*}
+        %     and thus (below we use c.w.~to denote which term \enquote{contracted with} which other term)
+        %     \newcommand{\cw}{\text{~c.w.~}}
+        %     \begin{equation*}
+        %         \begin{aligned}[t]
+        %             \abs{A}^2&=\begin{aligned}[t]
+        %                 &\frac{\overbrace{\abs{\nabla^2 u}^2}^{T^1\cw T^1}+\overbrace{(\nabla^2_{\nu\nu}u)^2}^{T^4\cw T^4}}{\abs{\nabla u}^2}\\
+        %             &+\frac{\overbrace{2\nu^k \nu_l \nabla^2_{kj}u (\nabla^2)^{lj}u}^{T^{2/3}\cw T^{2/3}}-\overbrace{4\nabla^2_{ij}u \nu^i \nu_k (\nabla^2)^{kj}u}^{T^{1}\cw T^{2/3}}+\overbrace{2(\nabla^2_{\nu\nu}u)^2}^{T^{2/3}\cw T^{3/2}}-\overbrace{4(\nabla^2_{\nu\nu}u)^2}^{T^{2/3}\cw T^{4}}+\overbrace{2(\nabla^2_{\nu\nu}u)^2}^{T^{1}\cw T^{4}}}{\abs{\nabla u}^2}
+        %             \end{aligned}\\
+        %             &=\frac{\abs{\nabla^2 u}^2-2g^{jk}\nabla^2_{kl}u\nabla^l u\nabla^2_{ij}u \nabla^i{u}/(\abs{\nabla u}^2)+(\nabla^2_{\nu\nu}u)^2}{\abs{\nabla u}^2}\\
+        %             &=\frac{\abs{\nabla^2 u}^2-(\nabla_k(\nabla_l u \nabla^l u)\nabla^k(\nabla_l \nabla^l u))/(2\abs{\nabla u}^2) +(\nabla^2_{\nu\nu}u)^2}{\abs{\nabla u}^2}\\
+        %             &=\frac{\abs{\nabla^2 u}^2-\abs{\nabla\abs{\nabla u}^2}^2/(2\abs{\nabla u}^2)+(\nabla^2_{\nu\nu}u)^2}{\abs{\nabla u}^2}\\
+        %             &=\frac{1}{\abs{\nabla u}^2}(\abs{\nabla^2 u}^2-2\abs{\nabla \abs{\nabla u}}^2+(\nabla^2_{\nu\nu}u)^2)\mathfullstop
+        %         \end{aligned}
+        %     \end{equation*}
+        %     On the other hand contracting \( A_{ij} \) gives
+        %     \begin{equation*}
+        %         H=\frac{1}{\abs{\nabla u}}(\nonHarmonic{\laplacian u}
+        %         -\nabla^2_{\nu \nu} u)\mathfullstop
+        %     \end{equation*}
+        %     and thus
+        %     \begin{equation*}
+        %         \abs{A}^2-H^2=\abs{\nabla u}^{-2}(\abs{\nabla^2 u}^2-2\abs{\nabla\abs{\nabla u}}^2\nonHarmonic{+2\laplacian u \nabla^2_{\nu\nu}u-(\laplacian u)^2})\mathfullstop
+        %     \end{equation*}
+        %     Combining with the contracted Gauss-Codazzi equation
+        %     \begin{equation*}
+        %         2\Ricci((\nabla u)/\abs{\nabla u},(\nabla u)/\abs{\nabla u})=R_\Omega-R_S+H^2-\abs{A}^2\mathcomma
+        %     \end{equation*} 
+        %     then yields the result.
+        % \end{proof}
+        
+        % \begin{lemma}[Bochner's identity]\label{lem:bochner_identity}
+        %     For any smooth function \( u \) on a Riemannian manifold \( (M,g) \),
+        %     \begin{equation*}
+        %         \frac{1}{2}\laplacian(\abs{\nabla u}^2)=\abs{\nabla^2 u}^2\nonHarmonic{+\scalarproduct{\nabla \laplacian u}{\nabla u}}+\Ricci(\nabla u, \nabla u)\mathfullstop
+        %     \end{equation*} 
+        % \end{lemma}
+        \begin{proof}[Proof of \cref{prop:main_inequality}]
+            During the following proof, we will be considering 
+            \begin{equation*}
+                \phi_\varepsilon\definedas \sqrt{\abs{\nabla u}^2+\varepsilon}
+            \end{equation*}
+            for \( \varepsilon>0 \) instead of \( \abs{\nabla u} \), since we cannot control the behavior of integrands like \( \laplacian \abs{\nabla u} \) and \( \partial_\nu \abs{\nabla u} \) at critical points of \( u \) (where \( \abs{\nabla u}=0 \)).
+            
+            We find
+            \begin{equation}\label{eq:main_inequality_applied_bochner}
+                \begin{aligned}[b]
+                    \laplacian \phi_\varepsilon & =\nabla_i \nabla^i \sqrt{\abs{\nabla u}^2+\varepsilon}                                                                                                                             \\
+                                                & =\nabla_i \frac{\nabla^i \abs{\nabla u}^2}{2\phi_\varepsilon}                                                                                                                      \\
+                                                & =\frac{\laplacian \abs{\nabla u}^2}{2\phi_\varepsilon}-\frac{\abs{\nabla\abs{\nabla u}^2}^2}{4\phi_\varepsilon^3}                                                                  \\
+                                                & \explain{\text{Bochner's identity}}{=}\inverse{\phi_\varepsilon}(\abs{\nabla^2 u}^2+\Ricci(\nabla u,\nabla u)-\phi_\varepsilon^{-2}\abs{\nabla u}^2\abs{\nabla \abs{\nabla u}}^2.
+                \end{aligned}
+            \end{equation}
+            
+            Thus on a regular level set \( S \) \cite[Lemma 4.1]{brayHarmonicFunctionsMass2019} yields
+            \begin{equation}
+                \laplacian \phi_{\varepsilon}=
+                \frac{1}{2\phi_{\varepsilon}}(\abs{\nabla^2 u}^2+\abs{\nabla u}^2(R_\Omega-R_S)+\additionalTerms{ 2 \cdot (1-\phi_\varepsilon^{-2}\abs{\nabla u}^2)\abs{\nabla \abs{\nabla u}}^2})\mathfullstop\label{eq:main_equality_applied_main_identity}
+            \end{equation}
+            
+            % The following only works on \mathcal{B} and thus can't help us.
+            % \nonHarmonic{Note that
+            % \begin{align*}
+            %     \frac{(\laplacian u)^2}{\phi_{\varepsilon}}+\frac{\scalarproduct{\nabla u}{ \nabla \laplacian u}}{\phi_{\varepsilon}}-\divergence\p*{\laplacian u \frac{\nabla u}{\phi_\varepsilon}}&=\frac{\laplacian u}{\phi_\varepsilon^2} \cdot \nabla_i u \nabla^i \phi_\varepsilon=\frac{\laplacian u}{2 \phi_\varepsilon^3} \cdot \nabla_i u \nabla^i \abs{\nabla u}^2\\
+            %     &=\frac{\laplacian u}{2\phi_\varepsilon^3} \cdot \nabla_i u \cdot 2 \cdot \nabla^i \nabla_j u \nabla^j u=\frac{\laplacian u}{\phi_\varepsilon^3} \cdot \abs{\nabla u}^2 \cdot \nabla^2_{\nu \nu}u.
+            % \end{align*}}
+            % and therefore
+            % \begin{multline*}
+            %     \divergence\p*{\nabla \phi_{\varepsilon}\nonHarmonic{-\laplacian u \frac{\nabla u}{\phi_{\varepsilon}}}}=\\
+            %     \frac{1}{2\phi_{\varepsilon}}\p*{\abs{\nabla^2 u}^2+\abs{\nabla u}^2(R_\Omega-R_S)\nonHarmonic{-(\laplacian u)^2}\additionalTerms{+2\cdot (1-\phi_{\varepsilon}^{-2}\abs{\nabla u}^2)(\abs{\nabla\abs{\nabla u}}^2-(\laplacian u)\nabla^2_{\nu \nu}u)}}
+            % \end{multline*}
+            
+            
+            Let now \( \mathcal{A}\subset \interval{\minu}{\maxu} \) be an open set containing all the critical values of \( u \) (images of points where \( \nabla u=0 \)), and let \( \mathcal{B}=\interval{\minu}{\maxu}\setminus \mathcal{A} \) be the complementary set.
+            
+            Then the divergence theorem yields
+            \begin{multline}
+                \int_{P_1\cap \inverse{u}(\mathcal{A})}\partial_\nu \phi_\varepsilon\odif{A}+\int_{P_1\cap \inverse{u}(\mathcal{B})}\partial_\nu \phi_\varepsilon\odif{A}+\int_{P_2}\partial_\nu \phi_\varepsilon\odif{A}=\int_{\boundary{\Omega}}\partial_\nu \phi_\varepsilon\odif{A}\\
+                =\int_{\Omega}\laplacian \phi_\varepsilon\odif{V}=\int_{\inverse{u}(\mathcal{A})}\laplacian \phi_\varepsilon\odif{V}+\int_{\inverse{u}(\mathcal{B})}\laplacian \phi_\varepsilon\odif{V}\mathfullstop\label{eq:main_inequality_branching_point}
+            \end{multline}
+            We first deal with the integrals over \( P_1\cap \inverse{u}(\mathcal{A}) \) and \( \inverse{u}(\mathcal{A}) \). Since
+            \begin{equation*}
+                \frac{\abs{\nabla u}}{\phi_\varepsilon}\abs{\nabla \abs{\nabla u}}=\frac{1}{2\phi_\varepsilon}\nabla(g(\nabla u,\nabla u))=\frac{g(\nabla^2 u,\nabla u)}{\phi_\varepsilon}\explain{\text{Cauchy--Schwarz}}{\leq}\frac{\abs{\nabla^2 u}\abs{\nabla u}}{\phi_\varepsilon}\explain{\abs{\nabla u}\leq \phi_\varepsilon}{\leq} \abs{\nabla^2 u}\mathcomma
+            \end{equation*}
+            \cref{eq:main_inequality_applied_bochner} and another application of Cauchy--Schwarz give on \( \inverse{u}(\mathcal{A}) \)
+            \begin{equation*}
+                \laplacian\phi_\varepsilon\geq \inverse{\phi_\varepsilon}\Ricci(\nabla u, \nabla u)\geq -\abs{\Ricci}\abs{\nabla u}\mathfullstop
+            \end{equation*}
+            Thus we can decompose into level sets of \( u \) using the coarea formula to get
+            \begin{equation}
+                \begin{aligned}[t]
+                    -\int_{\inverse{u}(\mathcal{A})}\laplacian\phi_\varepsilon\odif{V} & \leq \int_{\inverse{u}(\mathcal{A})}\abs{\Ricci}\abs{\nabla u}\odif{V} \\ 
+                                                                                       & =\int_{t\in \mathcal{A}}\int_{S_t}\abs{\Ricci}\odif{A}\odif{t}         \\
+                                                                                       & \leq C\int_{t\in \mathcal{A}}\mathcal{H}^2(S_t)\odif{t}
+                \end{aligned}\mathcomma\label{eq:A_bounded}
+            \end{equation}
+            where \( \mathcal{H}^2(S_t) \) is the Hausdorff measure of the level sets and \( C \) is some constant bounding the Ricci curvature.
+            
+            Similarly, on \( P_1\cap \inverse{u}(\mathcal{A}) \) we have 
+            \begin{equation*}
+                \begin{aligned}[t]
+                    \partial_{\nu}\phi_\varepsilon & =\frac{\nu^i\nabla_i\nabla_j u \nabla^j u}{\phi_\varepsilon}   \\ 
+                                                   & =\frac{\nabla^i u \nabla_i \nabla_j u \nu^j}{\phi_\varepsilon} \\
+                                                   & =\frac{g(\nabla_{\nabla u}\nabla u,\nu)}{\phi_\varepsilon}     \\
+                                                   & =-\frac{g(\nabla_{\nabla u}\nu,\nabla u)}{\phi_\varepsilon}    \\
+                                                   & \leq \abs{\nabla u}\abs{A_{P_1}}\leq \abs{\nabla u}C
+                \end{aligned}\mathcomma
+            \end{equation*}
+            where we have used \( g(\nabla u,\nu)=0 \) by the Neumann boundary condition of \( u \) on \( P_1 \). We thus get by the coarea formula
+            \begin{equation}
+                \int_{P_1\cap \inverse{u}(\mathcal{A})}\partial_{\nu} \phi_\varepsilon\odif{A}\leq \int_{t\in \mathcal{A}}\int_{P_1\cap S_t}\abs{A_{P_1}}\odif{l}\odif{t}\leq C\int_{t\in \mathcal{A}}\mathcal{H}^1(\boundary{S_t}\cap P_1)\odif{t}\mathfullstop\label{eq:A_boundary_bounded}
+            \end{equation}
+            Let us now deal with the integrals over \( P_1\cap \inverse{u}(\mathcal{B}) \) and \( \inverse{u}(\mathcal{B}) \). On \( P_1 \) we have as before
+            \begin{equation*}
+                \partial_\nu \phi_\varepsilon=-\frac{g(\nabla_{\nabla u}\nu,\nabla u)}{\phi_\varepsilon}
+            \end{equation*}
+            where we have used the Neumann boundary condition in the last line. Let \( n \) now denote the normal vector \( n^i=\frac{\nabla^i u}{\abs{\nabla u}} \) to \( S_t \). This yields
+            \begin{equation*}
+                \partial_\nu\phi_\varepsilon=-\inverse{\phi_\varepsilon}\abs{\nabla u}^2A_{P_1}(n,n)=-\inverse{\phi_\varepsilon}\abs{\nabla u}^2(H_{P_1}-\trace;_{S_t}A_{P_1})\mathfullstop
+            \end{equation*}
+            Let \( v\in \tangentspace{p}{P_1}\cap\tangentspace{p}{S_t} \) be a normed vector (there are only two choices, since the vector space is one-dimensional). Then (as \( S_t \) is orthogonal to \( P_1 \) by the Neumann boundary condition of \( u \) on \( P_1 \))
+            \begin{equation*}
+                \trace;_{S_t}A_{P_1}=A_{\boundary{\Omega}}(v,v)=\scalarproduct{\nabla_{v}v}{-n}=\kappa_{S_t\cap P_1}=\kappa_{\boundary{S_t}}\mathfullstop
+            \end{equation*}
+            Thus decomposing \( P_1 \) into level sets of \( u \) using the coarea formula yields 
+            \begin{equation}
+                \int_{P_1\cap \inverse{u}(\mathcal{B})}\partial_{\nu}\phi_\varepsilon\odif{A}=-\int_{t\in \mathcal{B}}\p*{\int_{\boundary{S_t}\cap P_1}\inverse{\phi_\varepsilon}\abs{\nabla u}(H_{P_1}-\kappa_{\boundary{S_t}})}\odif{t}\mathfullstop\label{eq:B_boundary_coarea_formula}
+            \end{equation}
+            Meanwhile on \( \inverse{\mathcal{B}} \) applying the coarea formula and \cref{eq:main_equality_applied_main_identity} produces
+            \begin{multline}\label{eq:B_coarea_formula}
+                \int_{\inverse{u}(\mathcal{B})}\laplacian\phi_\varepsilon\odif{V}=\\ \frac{1}{2}\int_{t\in \mathcal{B}}\int_{S_t}\frac{\abs{\nabla u}}{\phi_{\varepsilon}}\p*{\frac{\abs{\nabla^2 u}^2}{\abs{\nabla u}^2}+(R_{\Omega}-R_{S_t})+\additionalTerms{2\cdot (\abs{\nabla u}^{-2}-\phi_{\varepsilon}^{-2})\cdot\abs{\nabla \abs{\nabla u}}^2}}\odif{A}\odif{t}\mathfullstop
+            \end{multline}
+            % Note that 
+            % \begin{equation*}
+            %     \partial_\nu \phi_\varepsilon=\frac{n^i \nabla_{ij}u \nabla^j u}{\phi_\varepsilon}=0
+            % \end{equation*} 
+            % at critical points of \( u \) (where \( \nabla u=0 \)) and thus we may replace \( P_2 \) with \( \tilde{P}_2 \) in the integral in \cref{eq:main_inequality_branching_point} and below in \cref{eq:main_inequality_nearly_there}. 
+            We combine \cref{eq:B_coarea_formula} and \cref{eq:B_boundary_coarea_formula} with \cref{eq:main_inequality_branching_point} and obtain 
+            \begin{multline*}
+                \begin{aligned}[b]
+                       & \frac{1}{2}\int_{t\in \mathcal{B}}\int_{S_t}\frac{\abs{\nabla u}}{\phi_\varepsilon}\p*{\frac{\abs{\nabla^2 u}^2}{\abs{\nabla u}^2}+R_{\Omega}}\odif{A}\odif{t}                                                                                                           \\
+                    {} & -\int_{t\in \mathcal{B}}\p*{\frac{1}{2}\int_{S_t}\frac{\abs{\nabla u}}{\phi_\varepsilon}R_{S_t}\odif{A}+\int_{\boundary{S_t}\cap P_1}\frac{\abs{\nabla u}}{\phi_\varepsilon}(\kappa_{\boundary{S_t}}-H_{P_1})} \odif{t}-\int_{P_2}\partial_{\nu}\phi_\varepsilon\odif{A}
+                \end{aligned}=\\
+                \int_{P_1\cap \inverse{u}(\mathcal{A})}\partial_\nu \phi_\varepsilon\odif{A}-\int_{\inverse{u}(\mathcal{A})}\laplacian \phi_{\varepsilon}\odif{V}+\additionalTerms{\int_{t \in \mathcal{B}}\int_{S_t}(\phi_{\varepsilon}^{-2}-\abs{\nabla u}^{-2})\cdot\abs{\nabla\abs{\nabla u}}^2}.
+            \end{multline*}
+            Taking absolute values and using \cref{eq:A_bounded} and \cref{eq:A_boundary_bounded} yields
+            \begin{multline}\label{eq:main_equality_nearly_there}
+                \begin{aligned}[b]
+                    \Bigg\lvert & \frac{1}{2}\int_{t\in \mathcal{B}}\int_{S_t}\frac{\abs{\nabla u}}{\phi_\varepsilon}\p*{\frac{\abs{\nabla^2 u}^2}{\abs{\nabla u}^2}+R_{\Omega}}\odif{A}\odif{t}                                                                                                                       \\
+                    {}          & -\int_{t\in \mathcal{B}}\p*{\frac{1}{2}\int_{S_t}\frac{\abs{\nabla u}}{\phi_\varepsilon}R_{S_t}\odif{A}+\int_{\boundary{S_t}\cap P_1}\frac{\abs{\nabla u}}{\phi_\varepsilon}(\kappa_{\boundary{S_t}}-H_{P_1})} \odif{t}-\int_{P_2}\partial_{\nu}\phi_\varepsilon\odif{A}\Bigg\rvert
+                \end{aligned}\leq \\
+                C\int_{t\in \mathcal{A}}(\mathcal{H}^1(\boundary{S_t}\cap P_1)+\mathcal{H}^2(S_t))\odif{t}+\additionalTerms{\int_{t \in \mathcal{B}}\int_{S_t}(\phi_{\varepsilon}^{-2}-\abs{\nabla u}^{-2})\cdot\abs{\nabla\abs{\nabla u}}^2}.
+            \end{multline}
+            Since \( \Omega \) is compact and \( \mathcal{B} \) closed, \( \abs{\nabla u} \) and \( \abs{\nabla \abs{\nabla u}} \) are uniformly bounded from below on \( \inverse{u}(\mathcal{B}) \). In particular note that the \additionalTerms{additional term} is bounded! Also, on \( P_2 \) (where \( \abs{\nabla u}\neq 0 \)) we have
+            \begin{equation*}
+                \partial_\nu \phi_\varepsilon=\frac{\abs{\nabla u}}{\phi_\varepsilon}\partial_{\nu}\abs{\nabla u}\goesto \partial_{\nu}\abs{\nabla u}\quad \text{as \( \varepsilon\goesto 0 \)}
+            \end{equation*}
+            We can thus now take the limit \( \varepsilon\goesto 0 \) in \cref{eq:main_inequality_branching_point} and get
+            \begin{multline}
+                \begin{aligned}[b]
+                    \Bigg\lvert & \frac{1}{2}\int_{t\in \mathcal{B}}\int_{S_t}\p*{\frac{\abs{\nabla^2 u}^2}{\abs{\nabla u}^2}+R_{\Omega}}\odif{A}\odif{t}                                                                                   \\
+                    {}          & -\int_{t\in \mathcal{B}}\p*{2\pi \chi(S_t)-\int_{\boundary{S_t}\cap P_2}\kappa_{\boundary{S_t}}-\int_{\boundary{S_t}\cap P_1}H_{P_1}} \odif{t}-\int_{P_2}\partial_{\nu}\abs{\nabla u}\odif{A}\Bigg\rvert
+                \end{aligned}\leq \\
+                C\int_{t\in \mathcal{A}}(\mathcal{H}^1(\boundary{S_t}\cap P_1)+\mathcal{H}^2(S_t))\odif{t}+\additionalTerms{0}\mathfullstop\label{eq:inequality_with_critical_values_removed}
+            \end{multline}
+            % \begin{multline}
+            %     \frac{1}{2}\int_{t\in \mathcal{B}}\int_{S_t}\p*{\frac{\abs{\nabla^2 u}^2}{\abs{\nabla u}^2}+R_{\Omega}}\odif{A}\odif{t}\\
+            %     \begin{aligned}[t]&\leq 
+            %         \begin{aligned}[t]
+            %             &\int_{t\in \mathcal{B}}\p*{\frac{1}{2}\int_{S_t}R_{S_t}\odif{A}+\int_{\boundary{S_t}\cap P_1}(\kappa_{\boundary{S_t}}-H_{P_1})} \odif{t}\\
+            %             &+\int_{P_2}\partial_{\nu}\abs{\nabla u}\odif{A}+C\int_{t\in \mathcal{A}}(\mathcal{H}^1(\boundary{S_t}\cap P_1)+\mathcal{H}^2(S_t))\odif{t}
+            %         \end{aligned}\\
+            %         &=\begin{aligned}[t]
+            %         &\int_{t\in \mathcal{B}}\p*{2\pi \chi(S_t)-\int_{\boundary{S_t}\cap P_2}\kappa_{\boundary{S_t}}-\int_{\boundary{S_t}\cap P_1}H_{P_1}} \odif{t}\\
+            %         &+\int_{P_2}\partial_{\nu}\abs{\nabla u}\odif{A}+C\int_{t\in \mathcal{A}}(\mathcal{H}^1(\boundary{S_t}\cap P_1)+\mathcal{H}^2(S_t))\odif{t}\mathcomma
+            %     \end{aligned}
+            %     \end{aligned} \label{eq:inequality_with_critical_values_removed}
+            % \end{multline}
+            where we have also applied the Gauss--Bonnet theorem to \( S_t \).
+            
+            
+            By Sard's theorem (\cite{sardMeasureCriticalValues1942}), the set of critical values has measure \( 0 \) and we thus may take the measure of \( \mathcal{A} \) to be arbitrarily small. Since
+            \begin{equation*}
+                t\mapsto \mathcal{H}^1(\boundary{S_t}\cap P_1)+\mathcal{H}^2(S_t)
+            \end{equation*}
+            is integrable by the coarea formula, taking \( \abs{\mathcal{A}}\to 0 \) in \cref{eq:inequality_with_critical_values_removed} leads to
+            \begin{multline*}
+                \int_{\minu}^{\maxu} \int_{S_t} \frac{1}{2}\p[\Bigg]{\frac{\abs{\nabla^2 u}}{\abs{\nabla u}^2}+R }\odif{A}+\int_{\boundary{S_t}\cap P_1}H_{P_1}\odif{l}\odif{t}\\
+                =\int_{\minu}^{\maxu}\p[\Big]{2\pi \chi(S_t)-\int _{\boundary{S_t} \cap P_2}\kappa_{\boundary{S_t}}\odif{l}}\odif{t}+ \int_{P_2}\partial_{\nu} \abs{\nabla u}\odif{A}\mathfullstop
+            \end{multline*}
+        \end{proof}}
+% \begin{remark}\label{rem:no_critical_points_then_main_inequality_is_equality}
+%     Note that if \( u \) had no critical points (\ie if \( \abs{\nabla u}>0 \) everywhere), then we could have always worked with \( \abs{\nabla u} \) instead of \( \phi_\varepsilon \) and it is easy to check that under these conditions, \cref{prop:main_inequality} in fact becomes an equality.
+% \end{remark}
+% \section{Python code for computations and graphs}
+% \lstinputlisting[language=Python,frame=lines,caption={Numerical computation of the mass lower bound for the Schwarzschild examples},label={lst:computations_and_graph_for_example},basicstyle=\footnotesize]{computations_and_graphs/computations_and_graphs.py}
+By carrying this result through the calculations in \cite[Section 6]{brayHarmonicFunctionsMass2019}, while only changing the step in Equation 6.4, where we do not do not use $\chi(S_t)\leq 1$ and just leave \( \chi(S_t) \) as it is, one arrives at
+\begin{corollary}[Equality version of {\protect\NoHyper\cite[Theorem 1.2]{brayHarmonicFunctionsMass2019}}]
+    Let \( (M_{\ext},g) \) be an exterior region of an asymptotically flat Riemannian \( 3 \)-manifold \( (M, g) \) with mass \( m \). Let \( u \) be a harmonic function on \( (M_\ext, g) \) satisfying Neumann boundary conditions at \( \boundary{M} \), and which is asymptotic to one of the asymptotically flat coordinate functions of the associated end. Then there exists a closed region \( \Omega \) bounded by an infinite coordinate cylinder \( \boundary{\Omega}\) such that all the level sets \( S_t \) of \( u \) meet \( \boundary{\Omega} \) transversally and have Euler characteristic \( \chi(S_t \cap \Omega)\leq 1 \), and we have
+    \begin{equation*}
+        m = \frac{1}{16\pi}\int_{M_\ext} \p*{ \frac{\abs{\nabla^2 u}^2}{\abs{\nabla u}} + R_g\abs{\nabla u} } \odif{V}+\frac{1}{2}\int_{-\infty}^\infty (1-\chi(S_t \cap \Omega))\odif{t}.
+    \end{equation*}
+    In particular, if the scalar curvature is nonnegative, then \( m\geq 0 \). Furthermore, if \( m = 0 \) then \( (M,g) =(\reals^3,\delta)\).
+\end{corollary}
+\printbibliography
+\end{document}
