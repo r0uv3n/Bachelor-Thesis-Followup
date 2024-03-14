@@ -492,8 +492,8 @@ In an effort to keep this note mostly self-contained we will repeat pretty much 
     is asymptotically flat if there exists a compact set \( C \subset M \) such that we can write \( M\setminus C \) as a disjoint union of finitely many \emph{ends} \( M_{\mathrm{end}}^\ell \), where each end is diffeomorphic to the complement of a ball \( \reals^n\setminus B_1 \) (equipped with the standard metric \( \delta \)) and we have the following asymptotic behavior in the \emph{asymptotically flat coordinates} \( x_1,x_2,x_3\) defined by this diffeomorphism:
     \begin{equation}
         \begin{aligned}[t]
-            \abs{\partial^l(g_{ij}-\delta_{ij})}&=O(\abs{x}^{-q-l}),\quad l=0,1,2\mathfullstop\\
-            % \abs{\partial^l(k_{ij})}&=O(\abs{x}^{-1-q-l}),\quad l=0,1\mathcomma
+            \abs{\partial^l(g_{ij}-\delta_{ij})}&=O(\abs{u}^{-q-l}),\quad l=0,1,2\mathfullstop\\
+            % \abs{\partial^l(k_{ij})}&=O(\abs{u}^{-1-q-l}),\quad l=0,1\mathcomma
         \end{aligned}
     \end{equation}
     for some \( q>\frac{n-2}{2} \). We assume that the scalar curvature is integrable, \( R \in L^1(M) \), such that the ADM mass of each end is well-defined and given by
@@ -524,15 +524,15 @@ Our goal will be to prove the following:
     In particular if \( R \) is nonnegative everywhere, then the mass is nonnegative.
 \end{theorem}
 \begin{proof}[Proof of \cref{thm:harmonic_mass_equality}]
-    Consider harmonic coordinates \( x_1,\dotsc,x_n \), see \cite[Section 3.2]{brayHarmonicFunctionsMass2019}. 
+    Consider harmonic coordinates \( x_1,x_2,x_3 \), see \cite[Section 3.2]{brayHarmonicFunctionsMass2019}. \todo[Finish this later.]
 \end{proof}
 \section{An attempt at generalizing this method to higher dimensions}
 \newcommand{\vect}[1]{\mathbf{#1}}
 \newcommand{\nestedLevelSet}[1][]{\Sigma_{\ifstrempty{#1}{}{#1,}\vect{t}}} 
 \let\nls\nestedLevelSet
-The following is a consequence of \cref{prop:main_equality}. We are careless below in always using \( \odif{A} \) instead of whatever measure would be appropriate for the current integration (though we only use it for integration over submanifolds of \( \Omega \), but they need not neccessarily be hypersurfaces). 
+The following is a consequence of \cref{prop:main_equality}. We are careless below in always using \( \odif{A} \) instead of whatever measure would be appropriate for the current integration (though we only use it for integration over submanifolds of \( \Omega \), but they need not necessarily be hypersurfaces). 
 \begin{corollary}\label{cor:higher_dim_main_equality_version}
-    Let \( u_1,\dotsc,u_n \) be coordinates (in particular, none of the \( u_i \) should have any critical points) on \( (\Omega,g) \) as above, with maxima \( \maxu_i \), minima \( \minu_i \), and level sets \( S_{t}^i  \). Let further \( I_j^k=\prod_{i=j}^{k}\interval{\minu_i}{\maxu_i} \). For \( \vect{t}=(t_1,\dotsc,t_j) \) let \( \nls^j\definedas \bigcap_{i=1}^{j-1} S_{t_i}^i \). Note that \( \nls^1=\Omega \). Define also \( \nls\definedas \nls^{n+1}=\bigcap_{i=1}^n S_{t_i}^i \) (this will, since we consider coordinates, only consist of one point).
+    Let \( u_1,\dotsc,u_n \) be coordinates (in particular, none of the \( u_i \) should have any critical points) on \( (\Omega,g) \) as above, with maxima \( \maxu_i \), minima \( \minu_i \), and level sets \( S_{t}^i  \). Let further \( I_j^k=\prod_{i=j}^{k}\interval{\minu_i}{\maxu_i} \). For \( \vect{t}=(t_1,\dotsc,t_k) \) let (for \( j\leq k \)) \( \nls^j\definedas \bigcap_{i=1}^{j-1} S_{t_i}^i \). Note that \( \nls^1=\Omega \). Define also \( \nls\definedas \nls^{n+1}=\bigcap_{i=1}^n S_{t_i}^i \) (this will, since we consider coordinates, only consist of one point).
     
     Then
     \begin{align*}
@@ -591,97 +591,197 @@ Note in particular that in the above corollary, we get rid (via a telescoping su
     \begin{equation*}
         \frac{ \abs{\nabla^2_{\nls^i} u_1}}{\abs{\nabla_{\nls^i} u_1}^2}-R_{\nls^i}\geq -C\cdot \abs{\nabla u_j}
     \end{equation*}
-    for any \( j>i \) even in the presence of critical points, then I believe one could show a version of \cref{cor:harmonic_higher_dim_main_equality_version} for any such set of harmonic functions. One might hope that one can find (on any given asymptotically flat manifold) such a set of functions that also forms an asymptotically flat coordinate system. This feels like it might be a (very hazy) path towards proving the positive mass theorem in arbitrary dimension.
+    for any \( j>i \) even in the presence of critical points, then I believe one could show a version of \cref{cor:harmonic_higher_dim_main_equality_version} for any such set of harmonic functions. One might hope that one can find (on any given asymptotically flat manifold) such a set of functions that also forms an asymptotically flat coordinate system. This of course again needs some bounding of the level set scalar curvature, so we might have just shifted that difficulty of controlling the level set scalar curvature to another place.
+
+    I am relatively certain however that, if one can prove a version of \cref{cor:harmonic_higher_dim_main_equality_version} in the presence of critical points (for some set of function for which we can guarantee existence on arbitrary asymptotically flat manifolds), one should be able to prove the positive mass theorem in general dimension. Below is a proof under the restrictive assumption that a set of nested harmonic global coordinates exists (that is also itself an asymptotically flat coordinate system). In particular one has \( M_{\ext}=M \).
+
+    In general I would expect that the nested harmonic functions \( u_1,\dotsc,u_n \) just form an asymptotically flat coordinate system on some \( \Mend \subset M_{\ext} \) and otherwise fulfill Dirichlet boundary conditions on \( \boundary M_\ext  \). Then an argument like that in \cite[Section 6.2]{hirschSpacetimeHarmonicFunctions2021} should show that we get no additional contribution from the boundary integral over \( \boundary{M_{\ext}} \), assuming that the boundary of the exterior has zero mean curvature (see \cref{sec:exterior_boundary_higher_dimension} for more details). All this of course depends on the equality \cref{cor:harmonic_higher_dim_main_equality_version} working without modifications for more general nested harmonic functions.
 \end{remark}
-\subsection{Some calculations towards maybe showing a positive mass theorem}
+\subsection{An attempt at a positive mass theorem in general dimension (under very restrictive assumptions)}\label{sec:generalization_computations}
 The nested harmonic functions below  definitely do not exist on any manifold that is not diffeomorphic to \( \reals^n \), so keep in mind that all the calculations here are not particularly interesting without some way to generalize this.
 
-Let \( (M,g) \) be diffeomorphic to \( \reals^n \) and asymptotically flat with integrable scalar curvature \( R \). Assume we have nested harmonic asymptotically flat coordinates \( u_1,\dotsc,u_n \) (none of which have any critical points) and let \( C_L \) be the coordinate cube of side length \( 2 L \), centered at the origin of our coordinates. Let \( \Omega_L \) be the closure of the compact component of \( M\setminus C_L \). Let also \( F_{\pm L,i} \) denote the face of \( C_L \) with constant \( u_i=\pm L \), such that \( C_{L}=\bigcup_{i=1}^n F_{+L,i}\cup F_{-L,i} \).
+Let \( (M,g) \) be diffeomorphic to \( \reals^n \) and asymptotically flat with integrable scalar curvature \( R \). Assume we have nested harmonic asymptotically flat coordinates \( u_1,\dotsc,u_n \) (none of which have any critical points) and let \( C_L \) be the coordinate cube of side length \( 2 L \), centered at the origin of our coordinates. Let \( \Omega_L \) be the closure of the compact component of \( M\setminus C_L \). Let also \( F_{\pm L,i} \) denote the face of \( C_L \) with constant \( u_i=\pm L \), such that \( C_{L}=\bigcup_{i=1}^n F_{+L,i}\cup F_{-L,i} \). Below the notation \( \int_{F_{\pm L,i}} \pm f \) always represents \( \int_{F_{+L,i}}f-\int_{F_{-L,i}}f \).
 
 Recall that the mass is then given by
 \begin{equation*}
     m=\lim_{L \goesto \infty}\frac{1}{2(n-1)\omega_{n-1}}\int_{C_L}\sum_{i,j=1}^{n}(g_{ij,i}-g_{ii,j})\odif{A}\mathfullstop
 \end{equation*}
 On the other hand we obtain from \cref{cor:harmonic_higher_dim_main_equality_version}
-\begin{equation}
+\begin{equation}\label{eq:higher_dim_equality_applied}
     \begin{aligned}
-        &\int_{I_1^n}\int_{\nls[L]}\frac{1}{2}\p*{\sum_{i=1}^{n}\frac{\abs{\nabla_{\nls^i}^2 u_i}}{\abs{\nabla_{\nls^i}u_i}^2\cdot N_{\vect{t}}}+\frac{R_\Omega}{N_{\vect{t}}}}\odif{A}\odif{\vect{t}}\\
-        &\quad=\sum_{i=1}^{n}\int_{I_1^{i-1}}\int_{C_L\cap \nls^i}\frac{\partial_{\nu_{\nls^i}}\abs{\nabla_{\nls^i}u_i}}{\prod_{j=1}^{i-1}\abs{\nabla_{\nls^j}u_j}}\odif{A}\odif{\vect{t}}\mathcomma
+        &\int_{\interval{-L}{L}^n}\int_{\nls[L]}\frac{1}{2}\p*{\sum_{i=1}^{n}\frac{\abs{\nabla_{\nls^i}^2 u_i}}{\abs{\nabla_{\nls^i}u_i}^2\cdot N_{\vect{t}}}+\frac{R}{N_{\vect{t}}}}\odif{A}\odif{\vect{t}}\\
+        &\quad=\sum_{i=1}^{n}\int_{\interval{-L}{L}^{i-1}}\int_{C_L\cap \nls^i}\frac{\partial_{\nu_{\nls^i}}\abs{\nabla_{\nls^i}u_i}}{\prod_{j=1}^{i-1}\abs{\nabla_{\nls^j}u_j}}\odif{A}\odif{\vect{t}}\mathcomma
     \end{aligned}
 \end{equation}
 where \( \nls[L] \definedas \Omega_L \cap \nls=\Omega_L\cap \{u_i=t_i\quad \forall i\} \).
 
-Let us now compute the boundary terms:
-\begin{lemma}\label{lem:boundary_computation}
-    In the notation fixed above, we have \todo[fill in result]
+Let us now compute the boundary terms. In the following, let \( g_{\nls^i} \) be the induced metric on \( \nls^i \). It is shown in the appendix (\cref{eq:nested_level_set_metric_asymptotically_flat}) that \( (\nls^i,g_{\nls^i}) \) is also asymptotically flat with asymptotically flat coordinates \( u_{i},\dotsc,u_n \) and the same decay rate (\( q>(n-2)/2 \)) as \( (M,g) \). Then the proof of \cite[Lemma 6.1]{brayHarmonicFunctionsMass2019} carries over with only two modifications, namely
+\begin{enumerate}
+    \item we use coordinate hypercubes instead of cylinders as domains and thus get terms integrating over the different faces of instead of the mantle and disks of the cylinder,
+    \item and we need to exploit (in our equivalent of \cite[Equation 6.8]{brayHarmonicFunctionsMass2019}) that
+    \begin{equation}\label{eq:boundary_norms_factor_asymptotically_1}
+        \frac{1}{\prod_{j=1}^{i-1}\abs{\nabla_{\nls^j}u_j}}=\frac{1}{\prod_{j=1}^{i-1}(\delta^{jj}+O_2(\abs{u}^{-q}))}=1+O_2(\abs{u}^{-q})
+    \end{equation}
+    by some computations in the appendix.
+\end{enumerate}
+We obtain the following:
+\begin{lemma}
+    In the notation fixed above, we have for all \( \vect{t}=(t_1,\dotsc,t_{i-1})\in \ointerval{-L}{L}^{i-1} \) (and thus for almost all \( \vect{t}\in \interval{-L}{L}^{i-1} \))
     \begin{equation*}
-        \int_{I_1^{i-1}}\int_{C_L\cap \nls^i}\frac{\partial_{\nu_{\nls^i}}\abs{\nabla_{\nls^i}u_i}}{\prod_{j=1}^{i-1}\abs{\nabla_{\nls^j}u_j}}\odif{A}\odif{\vect{t}}=???\mathfullstop
+        \int_{C_L\cap \nls^i}\frac{\partial_{\nu_{\nls^i}}\abs{\nabla_{\nls^i}u_i}}{\prod_{j=1}^{i-1}\abs{\nabla_{\nls^j}u_j}}\odif{A}=\begin{aligned}[t]
+            &\frac{1}{2}\sum_{j=i}^n \int_{F_{\pm L,i}\cap \nls^i} \pm((g_{\nls^i})_{ij,j}-(g_{\nls^i})_{jj,i})\odif{A}\\
+            &{}+\frac{1}{2}\sum_{j=i+1}^n \int_{F_{\pm L,j}\cap \nls^i}\pm((g_{\nls^i})_{ji,i}-(g_{\nls^i})_{ii,j})\odif{A}\\
+            &{}+O(L^{(n-i)-1-2q})
+        \end{aligned}
     \end{equation*}
 \end{lemma}
-We first calculate the asymptotic behavior of some quantities. Let from now on \( n_{\nls^i} \) be the normal vector to \( \nls^i \) inside \( \nls^{i+1} \).
-\begin{lemma}
-    For all \( i=1,\dotsc,n \), and \( \abs{x}=L \) we have
+Let \( \pi_{F_{\pm L,i}} \) now be the projection onto \( TF_{\pm L,i} \). \( \pi_{F_{\pm L,i}} \) is clearly a bounded operator and we have \( \pi_{F_{\pm L,i}}(\partial_j)=\partial_j \) for all \( j\neq i \). We again (as a consequence of \cref{lem:asymptotic_behavior}) get \(\abs{ \pi_{F_{\pm L,i}}(\nabla_{\Sigma_t^j})}=\delta_{jj}+O_2(\abs{u}^{-q}) \) and thus also
+\begin{equation*}
+    \prod_{j=1}^{i-1}\abs{\pi_{F_{\pm L,i}}(\nabla_{\nls^j}u_j)}=1+O_2(\abs{u}^{-q})\mathfullstop
+\end{equation*}
+By combining this with the fact that \( (g_{\nls^i})_{ik,l}=O_1(\abs{u}^{-1-q}) \) we obtain
+
+\begin{align*}
+    &\int_{\interval{-L}{L}^{i-1}}\int_{C_L\cap \nls^i}\frac{\partial_{\nu_{\nls^i}}\abs{\nabla_{\nls^i}u_i}}{\prod_{j=1}^{i-1}\abs{\nabla_{\nls^j}u_j}}\odif{A}\odif{\vect{t}}\\
+    &\qquad=\begin{aligned}[t]
+        &\frac{1}{2}\int_{\interval{-L}{L}^{i-1}}\sum_{j=i}^n\int_{F_{\pm L,i}\cap \nls^i}  \pm\frac{((g_{\nls^i})_{ij,j}-(g_{\nls^i})_{jj,i})}{\prod_{j=1}^{i-1}\abs{\pi_{F_{\pm L,i}}(\nabla_{\nls^j}u_j)}}\odif{A}\odif{\vect{t}}\\
+        &{}+\frac{1}{2}\int_{\interval{-L}{L}^{i-1}} \sum_{j=i+1}^n\int_{F_{\pm L,j} \cap \nls^i} \pm\frac{((g_{\nls^i})_{ji,i}-(g_{\nls^i})_{ii,j})}{\prod_{j=1}^{i-1}\abs{\pi_{F_{\pm L,i}}(\nabla_{\nls^j}u_j)}}\odif{A}\odif{\vect{t}}\\
+        &{}+O(L^{n-2-2q})\mathfullstop
+    \end{aligned}
+\end{align*}
+But now (since \( \pi_{F_{\pm L,i}}(\nabla_{\nls^j})=\nabla_{F_{\pm L,j}\cap \nls^j} \)) the right hand side has exactly the right form so that we can repeatedly apply the coarea formula on \( F_{\pm L,i} \). This process yields 
+\begin{align*}
+    &\int_{\interval{-L}{L}^{i-1}}\int_{C_L\cap \nls^i}\frac{\partial_{\nu_{\nls^i}}\abs{\nabla_{\nls^i}u_i}}{\prod_{j=1}^{i-1}\abs{\nabla_{\nls^j}u_j}}\odif{A}\odif{\vect{t}}\\
+    &\qquad=\begin{aligned}[t]
+        &\frac{1}{2} \sum_{j=i}^n \int_{F_{\pm L,i}} \pm((g_{\nls^i})_{ij,j}-(g_{\nls^i})_{jj,i})\odif{A}\\
+        &{}+\frac{1}{2} \sum_{j=i+1}^n \int_{F_{\pm L,j}} \pm((g_{\nls^i})_{ji,i}-(g_{\nls^i})_{ii,j})\odif{A}\\
+        &{}+O(L^{n-2-2q})\mathfullstop
+    \end{aligned}
+\end{align*}
+We can now combine this with \cref{eq:higher_dim_equality_applied} to obtain
+\begin{equation*}
+    \begin{aligned}
+        &\int_{\interval{-L}{L}^n}\int_{\nls[L]}\frac{1}{2}\p*{\sum_{i=1}^{n}\frac{\abs{\nabla_{\nls^i}^2 u_i}}{\abs{\nabla_{\nls^i}u_i}^2\cdot N_{\vect{t}}}+\frac{R}{N_{\vect{t}}}}\odif{A}\odif{\vect{t}}+O(L^{n-2-2q})\\
+        &\quad=\frac{1}{2}\sum_{i=1}^{n}\begin{aligned}[t]
+            \Bigg(&\sum_{j=i+1}^{n}\int_{F_{\pm L,j}} \pm((g_{\nls^i})_{ji,i}-(g_{\nls^i})_{ii,j})\odif{A}\\
+            &{}+ \sum_{j=i}^{n}\int_{F_{\pm L,i}}\pm((g_{\nls^i})_{ij,j}-(g_{\nls^i})_{jj,i})\odif{A}\Bigg)
+        \end{aligned}\\
+        &\quad=\frac{1}{2}\sum_{i,j=1}^n\int_{F_{\pm L,i}}\pm((g_{\nls^i})_{ij,j}-(g_{\nls^i})_{jj,i})\odif{A}\mathfullstop
+    \end{aligned}
+\end{equation*}
+Using \cref{eq:nested_level_set_metric_asymptote} we can replace \( g_{\nls^i} \) with \( g \), incurring only another 
+\begin{equation*}
+    \int_{F_{\pm L,i}}O(\abs{u}^{-1-2q})\odif{A}=O(\abs{u}^{n-2-2q})
+\end{equation*} 
+term. We thus obtain (after dividing by \( (n-1)\omega_{n-1} \))
+\begin{align*}
+    &\int_{\interval{-L}{L}^n}\int_{\nls[L]}\frac{1}{2(n-1)\omega_{n-1}}\p*{\sum_{i=1}^{n}\frac{\abs{\nabla_{\nls^i}^2 u_i}}{\abs{\nabla_{\nls^i}u_i}^2\cdot N_{\vect{t}}}+\frac{R}{N_{\vect{t}}}}\odif{A}\odif{\vect{t}}\\
+    &\quad=\frac{1}{2(n-1)\omega_{n-1}}\sum_{i,j=1}^n\int_{F_{\pm L,i}}\pm(g_{ij,j}-g_{jj,i})\odif{A}+O(\abs{u}^{n-2-2q})\mathfullstop
+\end{align*}
+Letting \( L \) go to \( \infty \) and noticing that \( n-2-2q<0 \), we obtain our main result,
+\begin{equation*}
+    \int_{\reals^n}\int_{\nls}\frac{1}{2(n-1)\omega_{n-1}}\p*{\sum_{i=1}^{n}\frac{\abs{\nabla_{\nls^i}^2 u_i}}{\abs{\nabla_{\nls^i}u_i}^2\cdot N_{\vect{t}}}+\frac{R}{N_{\vect{t}}}}\odif{A}\odif{\vect{t}}=m.
+\end{equation*}
+In particular the mass must be positive if \( R\geq 0. \)
+
+
+\appendix
+\section{Some computations of asymptotic behavior}
+We compute the following to justify \cref{eq:boundary_norms_factor_asymptotically_1}. Let from now on \( n_{\nls^i} \) be the normal vector to \( \nls^i \) inside \( \nls^{i+1} \).
+\begin{lemma}\label{lem:asymptotic_behavior}
+    For all \( i=1,\dotsc,n \), and \( \abs{u}=L \) we have
     \begin{equation*}
-        \abs{\nabla_{\nls^i}u_i}^2=g^{ii}+O_2(\abs{x}^{-2q})
+        \abs{\nabla_{\nls^i}u_i}^2=g^{ii}+O_2(\abs{u}^{-2q})
     \end{equation*}
     and 
     \begin{equation*}
-        n_{\nls^i}=\partial_i+O_2(\abs{x}^{-q}).
+        n_{\nls^i}=\partial_i+O_2(\abs{u}^{-q}).
     \end{equation*}
 \end{lemma}
 \begin{proof}
     Note first that for all \( i \), the normal to the level set \( S_{t_i}^i \)  has coordinates 
     \begin{equation*}
-        g^{jk}\delta_{ik}=\delta_{ik}+O_2(\abs{x}^{-q})
+        g^{jk}\delta_{ik}=\delta_{ik}+O_2(\abs{u}^{-q})
     \end{equation*} 
     (since it is equal to \( (\odif{u_i})^\sharp \), and \( \odif{u_i} \) has coordinates \( \delta_{ik} \)). In particular, the second claim is true for \( n=1 \).
 
-    Note also that \( \abs{\nabla u_i}^2=\abs{\odif{u_i}}^2=g^{ii}=\delta^{ii}+O(\abs{x}^{-q}) \) (by a Taylor expnasion of the matrix inverse).
+    Note also that \( \abs{\nabla u_i}^2=\abs{\odif{u_i}}^2=g^{ii}=\delta^{ii}+O(\abs{u}^{-q}) \) (by a Taylor expnasion of the matrix inverse).
     
     We proceed further by induction. Assume the second claim is true for all \( i\leq j \). Then we obtain on one hand
     \begin{equation*}
-        \abs{\nabla_{\nls^j}u_j}^2=\abs{\nabla u_j}^2-\sum_{k=1}^{j}\scalarproduct{n_{\nls^k}}{\nabla u_j}^2=g^{jj}+O_2(\abs{x}^{-2q})\mathcomma
+        \abs{\nabla_{\nls^j}u_j}^2=\abs{\nabla u_j}^2-\sum_{k=1}^{j}\scalarproduct{n_{\nls^k}}{\nabla u_j}^2=g^{jj}+O_2(\abs{u}^{-2q})\mathcomma
     \end{equation*}
     since
     \begin{equation*}
-        \scalarproduct{n_{\nls^k}}{\nabla u_j}=\abs{\nabla u_j}\cdot (\scalarproduct{\partial_k}{\partial_j}+O_2(\abs{x}^{-q}))=O_2(\abs{x}^{-q})\mathfullstop
+        \scalarproduct{n_{\nls^k}}{\nabla u_j}=\abs{\nabla u_j}\cdot (\scalarproduct{\partial_k}{\partial_j}+O_2(\abs{u}^{-q}))=O_2(\abs{u}^{-q})\mathfullstop
     \end{equation*}
     On the other hand we get
     \begin{align*}
-        n_{\nls^{j+1}}&=\partial_{j+1}+O_2(\abs{x}^{-q})-\sum_{k=1}^{j}n_{\nls^j}\cdot \scalarproduct{n_{\nls^k}}{\partial_{j+1}+O_2(\abs{x}^{-q})}\\
-        &=\partial_{j+1}+O_2(\abs{x}^{-q}).
+        n_{\nls^{j+1}}&=\partial_{j+1}+O_2(\abs{u}^{-q})-\sum_{k=1}^{j}n_{\nls^j}\cdot \scalarproduct{n_{\nls^k}}{\partial_{j+1}+O_2(\abs{u}^{-q})}\\
+        &=\partial_{j+1}+O_2(\abs{u}^{-q}).
     \end{align*}
 \end{proof}
-\begin{proof}[Proof of \cref{lem:boundary_computation}]
-    To begin, note that 
-    \begin{equation*}
-        \nabla_{\nls^i}\abs{\nabla_{\nls^i}}=\nabla(g^{ii}+O_2(\abs{x}^{-2q}))^{1/2}=-\frac{1}{2}\nabla_{\nls^i}g_{ii}+O_1(\abs{x}^{-1-2q})
-    \end{equation*}
-    and
-    \begin{equation*}
-        \evaluateat{\nu_{\nls^i}}{F_{\pm i,L}}=\pm \partial_i+O_2(\abs{x}^{-q})-\sum_{j=1}^{i-1}n_{\nls^j}\scalarproduct{n_{\nls^j}}{\pm \partial_i+O_2(\abs{x}^{-q})}=\pm\partial_i+O_2(\abs{x})\mathfullstop
-    \end{equation*}
-    We further have
-    \begin{equation*}
-        \frac{1}{\prod_{j=1}^{i-1}\abs{\nabla_{\nls^j}u_j}}=\frac{1}{\prod_{j=1}^{i-1}(\delta^{ii}+O_2(\abs{x}^{-q}))}=1+O_2(\abs{x}^{-q})\mathfullstop
-    \end{equation*}
-    % and similarly
+Notice also that, for \( j,k\geq i \),
+\begin{equation}
+    g_{jk}=(g_{\nls^i})_{jk}+\sum_{l=1}^{i-1}\scalarproduct{n_{\nls^l}}{\partial_j}\scalarproduct{\nls^l}{\partial_k}=(g_{\nls^i})_{jk}+O_2(\abs{u}^{-2q}),\label{eq:nested_level_set_metric_asymptotically_flat}
+\end{equation}
+where we have used the second part of \cref{lem:asymptotic_behavior}. In particular we obtain
+\begin{equation}\label{eq:nested_level_set_metric_asymptote}
+    (g_{\nls^i})_{jk,l}=g_{jk,l}+O_1(\abs{u}^{-1-2q}).
+\end{equation}
+
+% \begin{proof}[Proof of \cref{lem:boundary_computation}]
+%      To begin, note that 
+%     \begin{equation*}
+%         \nabla_{\nls^i}\abs{\nabla_{\nls^i}}=\nabla_{\nls^i}((g_{\nls^i})^{ii}+O_2(\abs{u}^{-2q}))^{1/2}=-\frac{1}{2}\nabla_{\nls^i}(g_{\nls^i})_{ii}+O_1(\abs{u}^{-1-2q})
+%     \end{equation*}
+%     and
+%     \begin{equation*}
+%         \evaluateat{\nu_{\nls^i}}{F_{\pm L,j}}=\pm \partial_{\nls^i,j}+O_2(\abs{u}^{-q})\mathfullstop
+%     \end{equation*}
+%     We further have
     % \begin{equation*}
-    %     \prod_{j=1}^{i-1}\abs{\nabla u_j}=1+O_2(\abs{x}^{-q}).
+    %     \frac{1}{\prod_{j=1}^{i-1}\abs{\nabla_{\nls^j}u_j}}=\frac{1}{\prod_{j=1}^{i-1}(\delta^{ii}+O_2(\abs{u}^{-q}))}=1+O_2(\abs{u}^{-q})\mathfullstop
     % \end{equation*}
-    It follows that
-    \begin{equation*}
-        \int_{I_1^{i-1}}\int_{F_{\pm L,j}\cap \nls^i}\frac{\partial_{\nu_{\nls^i}}\abs{\nabla_{\nls^i}u_i}}{\prod_{j=1}^{i-1}\abs{\nabla_{\nls^j}u_j}}\odif{A}\odif{\vect{t}}=\int_{I_1^{i-1}}\int_{ F_{\pm L,j}\cap \nls^i}\pm g_{ii,j}\odif{A}\odif{\vect{t}}+O_2(L^{1-2q})\mathcomma
-    \end{equation*}
-    where we have used that \( \nabla_{\nls^i}g_{ii}=O_1(\abs{x}^{-1-q}) \). Note that the above is zero (!) if \( j<i \) (as then for almost all \( \vect{t} \) we have \( F_{\pm L,j}\cap \nls^i=\emptyset \)). Note also that
-    \begin{equation*}
-        1-2q\leq 1-(n-2)<0
-    \end{equation*} 
-    for all \( n\geq 3 \).
+%     % and similarly
+%     % \begin{equation*}
+%     %     \prod_{j=1}^{i-1}\abs{\nabla u_j}=1+O_2(\abs{u}^{-q}).
+%     % \end{equation*}
+%     It follows that
+%     \begin{equation*}
+%         \int_{I_1^{i-1}}\int_{F_{\pm L,j}\cap \nls^i}\frac{\partial_{\nu_{\nls^i}}\abs{\nabla_{\nls^i}u_i}}{\prod_{j=1}^{i-1}\abs{\nabla_{\nls^j}u_j}}\odif{A}\odif{\vect{t}}=\int_{I_1^{i-1}}\int_{ F_{\pm L,j}\cap \nls^i}\pm (g_{\nls^i})_{ii,j}\odif{A}\odif{\vect{t}}+O_2(L^{1-2q})\mathcomma
+%     \end{equation*}
+%     where we have used that \( \nabla_{\nls^i}(g_{\nls^i})_{ii}=O_1(\abs{u}^{-1-q}) \). Note that the above is zero (!) if \( j<i \) (as then for almost all \( \vect{t} \) we have \( F_{\pm L,j}\cap \nls^i=\emptyset \)). Note also that
+%     \begin{equation*}
+%         1-2q\leq 1-(n-2)<0
+%     \end{equation*} 
+%     for all \( n\geq 3 \). Now, because \( u^i \) is harmonic on \( \nls^i \) we get the following equivalent of \cite[Equation 6.9]{brayHarmonicFunctionsMass2019} (\todo[add full calculation])
+%     \begin{equation*}
+%         (g_{\nls^i})_{ii,i}=\sum_{j=i+1}^{n}(g_{\nls}^i)_{jj,i}-2(g_{\nls}^i)_{ji,j}.
+%     \end{equation*}
 
+% \end{proof}
+\section{What happens if we have a boundary?}\label{sec:exterior_boundary_higher_dimension}
+If we want to generalize the computations of \cref{sec:generalization_computations}, we will have to compute another boundary term over \( \boundary{M_{\ext}} \), namely
+\begin{equation*}
+    \sum_{i=1}^{n}\int_{\reals^{i-1}}\int_{\boundary{M_{\ext}}\cap \nls^i}\frac{\partial_{\nu_{\nls^i}}\abs{\nabla_{\nls^i}u_i}}{\prod_{j=1}^{i-1}\abs{\nabla_{\nls^j} u_j}}\odif{A}\odif{\vect{t}}\mathfullstop
+\end{equation*}
+Here we assume that all the \( u_i \) admit \( \boundary{M_{\ext}} \) as a (connected component of a) regular level set. But then there exists some \( \vect{t}\in \reals^n \) such that \( \boundary{M_{\ext}}\subset \nls^i \) for all \( i\leq n \). Note however that for \( i\geq 2 \), \( \nls^i \) is at most \( (n-1) \) dimensional, and thus in particular the normal vector \( \nu_{\nls^i} \) to \( \boundary{M_{\ext}} \) inside \( \nls^i \) must be zero. Thus we are only left with the term with \( i=1 \), i.e.
+\begin{equation*}
+    \int_{\boundary{M_{\ext}}}\partial_{\nu}\abs{\nabla u_1}\odif{A}.
+\end{equation*} 
+We can now repeat the computation of \cite[Section 6.2]{hirschSpacetimeHarmonicFunctions2021} with \( k=0 \) (and thus also \( \mathcal{K}=0 \)) and obtain
+\begin{equation*}
+    \int_{\boundary{M_{\ext}}}\partial_{\nu}\abs{\nabla u_1}\odif{A}=\int_{\boundary{M_{\ext}}}H\cdot \abs{\nu(u_1)}\odif{A},
+\end{equation*}
+where \( H \) and \( \nu \) respectively are the mean curvature of and normal vector to \( \boundary{M_{\ext}} \) inside \( M_{\ext} \).
 
-\end{proof}
+Noting now that the boundary of our exterior regions is minimal (i.e.~\( H=0 \)), we see that this additional term vanishes entirely.
 
+% \begin{equation*}
+%     \partial_{\nu_{\nls^i}}\abs{\nabla_{\nls^i}u_i}=H_{\nls^i\cap \boundary{M_{\ext}}}\abs{\partial_{\nu_{\nls^i}}u_i}\mathcomma
+% \end{equation*}
+% where \( H_{\nls^i\cap \boundary{M_{\ext}}} \) is the mean curvature of \( \nls^i\cap \boundary{M_{\ext}} \) inside \( \nls^i \). But \( \boundary{M_{\ext}}\subset \nls^i \) and
 
 \endgroup
 
